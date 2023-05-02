@@ -150,7 +150,13 @@ jobs:
       - name: Prepare build
         shell: bash
         run: |
-          apt install build-essential perl pkg-config libssl-dev
+          git clone https://github.com/Microsoft/vcpkg --depth=1
+          cd vcpkg
+          bootstrap-vcpkg.bat
+          vcpkg.exe integrate install
+          vcpkg.exe install openssl:x64-windows-static
+          export OPENSSL_NO_VENDOR=1
+          export OPENSSL_DIR=$PWD/packages/openssl_x64-windows-static
 
       - name: Run build (${{ matrix.target }})
         uses: actions-rs/cargo@v1
