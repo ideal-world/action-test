@@ -132,37 +132,37 @@ jobs:
       matrix:
         target:
           [
-#            x86_64-pc-windows-gnu,
+            x86_64-pc-windows-gnu,
             x86_64-pc-windows-msvc,
           ]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-      # - name: Init rust environment
-      #   uses: actions-rs/toolchain@v1
-      #   with:
-      #     toolchain: stable
-      #     profile: minimal
-      #     override: true
-      #     target: ${{ matrix.target }}
+      - name: Init rust environment
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          target: ${{ matrix.target }}
 
-      # - name: Prepare build
-      #   shell: bash
-      #   run: |
-      #     git clone https://github.com/Microsoft/vcpkg --depth=1
-      #     cd vcpkg
-      #     bootstrap-vcpkg.bat
-      #     vcpkg.exe integrate install
-      #     vcpkg.exe install openssl:x64-windows-static
-      #     export OPENSSL_NO_VENDOR=1
-      #     export OPENSSL_DIR=$PWD/packages/openssl_x64-windows-static
+      - name: Prepare build
+        shell: bash
+        run: |
+          git clone https://github.com/Microsoft/vcpkg --depth=1
+          cd vcpkg
+          bootstrap-vcpkg.bat
+          vcpkg.exe integrate install
+          vcpkg.exe install openssl:x64-windows-static
+          export OPENSSL_NO_VENDOR=1
+          export OPENSSL_DIR=$PWD/packages/openssl_x64-windows-static
 
-      # - name: Run build (${{ matrix.target }})
-      #   uses: actions-rs/cargo@v1
-      #   with:
-      #     command: build
-      #     args: --release --target ${{ matrix.target }}
+      - name: Run build (${{ matrix.target }})
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target ${{ matrix.target }}
 
       - name: Prepare artifacts
         shell: bash
@@ -173,7 +173,7 @@ jobs:
 
           RELEASE_NAME=action-test-${{ matrix.target }}-${{ github.ref_name }}
           CHECKSUM=${RELEASE_NAME}.checksum.txt
-          mv Cargo.toml ${RELEASE_NAME}
+          mv ${SRC_DIR}/action-test ${RELEASE_NAME}
           certutil -hashfile ${RELEASE_NAME} SHA256 >${CHECKSUM}
 
           cp ${RELEASE_NAME} ${DEST_DIR}
@@ -181,15 +181,15 @@ jobs:
 
           ls ${DEST_DIR}
 
-      # - name: Upload artifacts to summary
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: ${{ env.ARTIFACT_DIR }}
-      #     path: |
-      #       ${{ env.ARTIFACT_DIR }}/
+      - name: Upload artifacts to summary
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.ARTIFACT_DIR }}
+          path: |
+            ${{ env.ARTIFACT_DIR }}/
 
-      # - name: Upload artifacts to release
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     files: |
-      #       ${{ env.ARTIFACT_DIR }}/*.*
+      - name: Upload artifacts to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ env.ARTIFACT_DIR }}/*.*
