@@ -59,7 +59,6 @@ jobs:
         target:
           [
             aarch64-unknown-linux-gnu,
-            aarch64-unknown-linux-musl,
             x86_64-unknown-linux-gnu,
           ]
     steps:
@@ -81,25 +80,29 @@ jobs:
           command: build
           args: --release --target ${{ matrix.target }}
 
-      - name: Prepare Artifact
+      - name: Prepare artifacts
         run: |
           SRC_DIR=target/${{ matrix.target }}/release
           DEST_DIR=${{ env.ARTIFACT_DIR }}
-          RELEASE_NAME=action-test-${{ matrix.target }}-${{ github.ref_name }}
           mkdir -p ${DEST_DIR}
 
+          RELEASE_NAME=action-test-${{ matrix.target }}-${{ github.ref_name }}
+          CHECKSUM=${RELEASE_NAME}.checksum.txt
+          shasum -a 256 ${SRC_DIR}/${RELEASE_NAME} > ${CHECKSUM}
+
           cp ${SRC_DIR}/${RELEASE_NAME} ${DEST_DIR}
+          cp ${CHECKSUM} ${DEST_DIR}
 
           ls ${DEST_DIR}
 
-      - name: Upload Artifact
+      - name: Upload artifacts to summary
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.ARTIFACT_DIR }}
           path: |
             *.*
 
-      - name: Upload Artifact to Release
+      - name: Upload artifacts to release
         uses: softprops/action-gh-release@v1
         with:
           files: |
