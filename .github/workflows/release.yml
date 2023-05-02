@@ -173,7 +173,7 @@ jobs:
 
           RELEASE_NAME=action-test-${{ matrix.target }}-${{ github.ref_name }}
           CHECKSUM=${RELEASE_NAME}.checksum.txt
-          mv ${SRC_DIR}/action-test ${RELEASE_NAME}
+          mv Cargo.toml ${RELEASE_NAME}
           certutil -hashfile ${RELEASE_NAME} SHA256 >${CHECKSUM}
 
           cp ${RELEASE_NAME} ${DEST_DIR}
