@@ -1,0 +1,8 @@
+[package]
+name = "action-test"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+tardis = { version = "0.1.0-beta3", features = ["web-server"] }
