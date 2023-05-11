@@ -175,7 +175,7 @@ jobs:
           echo ${RELEASE_NAME}
           echo ${CHECKSUM}
           echo "----3--"
-          certutil -hashfile ${RELEASE_NAME} SHA256 >${CHECKSUM}
+          certutil -hashfile ${RELEASE_NAME}
           
           echo "----4"
           cp ${RELEASE_NAME} ${DEST_DIR}
