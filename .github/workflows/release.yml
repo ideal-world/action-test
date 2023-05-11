@@ -168,7 +168,7 @@ jobs:
           DEST_DIR=${{ env.ARTIFACT_DIR }}
           mkdir -p ${DEST_DIR}
           echo "----2"
-          RELEASE_NAME=action-test-${{ matrix.target }}
+          RELEASE_NAME=action-test-${{ matrix.target }}.exe
           CHECKSUM=${RELEASE_NAME}.checksum.txt
           mv ${SRC_DIR}/action-test ${RELEASE_NAME}
           echo "----3"
@@ -176,7 +176,7 @@ jobs:
           echo ${CHECKSUM}
           echo `ls -l $PWD`
           echo "----3--"
-          certutil -hashfile ${RELEASE_NAME}
+          certutil -hashfile ${RELEASE_NAME} >${CHECKSUM}
           
           echo "----4"
           cp ${RELEASE_NAME} ${DEST_DIR}
