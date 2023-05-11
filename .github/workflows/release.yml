@@ -132,8 +132,7 @@ jobs:
       matrix:
         target:
           [
-            x86_64-pc-windows-gnu,
-            x86_64-pc-windows-msvc,
+             x86_64-pc-windows-msvc,
           ]
     steps:
       - name: Check out the repo
@@ -147,16 +146,16 @@ jobs:
           override: true
           target: ${{ matrix.target }}
 
-      - name: Prepare build
-        shell: bash
-        run: |
-          git clone https://github.com/Microsoft/vcpkg --depth=1
-          cd vcpkg
-          bootstrap-vcpkg.bat
-          vcpkg.exe integrate install
-          vcpkg.exe install openssl:x64-windows-static
-          export OPENSSL_NO_VENDOR=1
-          export OPENSSL_DIR=$PWD/packages/openssl_x64-windows-static
+#       - name: Prepare build
+#         shell: bash
+#         run: |
+#           git clone https://github.com/Microsoft/vcpkg --depth=1
+#           cd vcpkg
+#           bootstrap-vcpkg.bat
+#           vcpkg.exe integrate install
+#           vcpkg.exe install openssl:x64-windows-static
+#           export OPENSSL_NO_VENDOR=1
+#           export OPENSSL_DIR=$PWD/packages/openssl_x64-windows-static
 
       - name: Run build (${{ matrix.target }})
         uses: actions-rs/cargo@v1
